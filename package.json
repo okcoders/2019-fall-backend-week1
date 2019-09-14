@@ -4,6 +4,8 @@
   "description": "Try number 2",
   "main": "app.js",
   "scripts": {
+    "start": "nodemon ./app.js",
+    "bob": "echo \"Hello Everyone... Bob was here\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -12,6 +14,7 @@
   "author": "Bob Rockers <rrockers@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^1.19.2"
   }
 }
