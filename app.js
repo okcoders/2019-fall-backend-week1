@@ -1,43 +1,42 @@
-//My App
+//My ToDo App
 var express = require('express');
+var mongoose = require('mongoose');
+
 var app = express();
+var todo = require('./models/todo');
 var port =  3000;
 
 app.use('/', express.static('files'));
 
-app.get( '/helloworld', function(req,res){ 
-  res.send("<h1>Hello to the world.</h1>"); }
-);
+mongoose.connect('mongodb://localhost/todo');
+var db = mongoose.connection;
 
-app.post('/helloworld', function(req,res){
- res.send("This is NOT the right Hello World!");
+db.on('error', function(msg){
+		console.log("Mongoose: Unable to connec to todo database. " + msg);
 });
 
-app.get('/json/helloworld', function(req,res){
- res.json( { message: "Hello to the world." } );
+db.once('open', function(){
+		console.log("Mongoose connected to todo database.");
 });
 
-app.get('/hello/world', function(req,res){
- res.send("This is ANOTHER hello world.");
+// Let's begin our crud operations
+app.get('/todo/all', function(req,res){
+	todo.find({}).exec(function(err,tasks){
+		if(err){
+			console.log("Error getting tasks from todo database");
+			res.status(404);
+		} else {
+			res.json(tasks);
+		}
+	});
 });
 
-app.get('/message/1', function(req,res){
-	res.json( {message: "This is message one"} );
-});
-
-app.get('/message/1.thing', function(req,res){
-	res.json( {message: "This is message one dot thing"} );
-});
-
+// This is example code
 app.get('/message/for/:id', function(req,res){
 	var userID = req.params.id;
 	res.json( {message: "This is a message for " + userID} );
 });
 
-app.get('/message/*', function(req,res){
-	res.json( {message: "THis is every other message"} );
-});
-
 app.listen(port, function(){
-    console.log("Express running on port:" + port);
+		console.log("Express running on port:" + port);
 });
